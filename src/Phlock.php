@@ -55,7 +55,7 @@ class Phlock {
 		return $this->client()->contains($source_id, $graph_id, $destination_id);
 	}
 	
-	public function count($source_id, $graph, $destination_ids) {
+	public function size($source_id, $graph, $destination_ids) {
 		$term = $this->createQueryTerm($source_id, $graph, $destination_ids);
 		$operation = new Phlock_SelectOperation($this->client(), $term);
 		return $operation->size();

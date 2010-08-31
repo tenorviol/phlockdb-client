@@ -30,10 +30,10 @@ class PhlockUtilsTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($expected, $result);
 	}
 	
-	public function testCount() {
+	public function testSize() {
 		$flock = $this->getPhlock();
 		$this->assertEqualsRetry(2, function() use ($flock) {
-			return $flock->count(1,1,null);
+			return $flock->size(1,1,null);
 		});
 	}
 	
