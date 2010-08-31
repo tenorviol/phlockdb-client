@@ -1,7 +1,7 @@
 <?php
 
 $GLOBALS['THRIFT_ROOT'] = '/usr/local/thrift-0.2.0/lib/php/src';
-require_once 'src/Phlock.php';
+require_once 'src/autoload.php';
 
 class PhlockUtilsTest extends PHPUnit_Framework_TestCase {
 	
