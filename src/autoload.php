@@ -1,7 +1,7 @@
 <?php
 
 spl_autoload_register(function($class) {
-	if (strncmp('Phlock', $class, 7)) {
+	if (strncmp('Phlock', $class, 6)) {
 		return false;
 	}
 	static $dir = __DIR__;
