@@ -43,11 +43,11 @@ class Phlock {
 	}
 	
 	public function update($method, $source_id, $graph, $destination_ids, $priority = Flock_Priority::High) {
-		$operations = new Phlock_ExecuteOperations();
+		$operations = new Phlock_ExecuteOperations($this->client());
 		$operations->setPriority($priority);
 		$term = $this->createQueryTerm($source_id, $graph, $destination_ids);
 		$operations->addOperation(new Phlock_ExecuteOperation($method, $term));
-		return $this->client()->execute($operations->toThrift());
+		return $operations->apply();
 	}
 	
 	public function contains($source_id, $graph, $destination_id) {
@@ -57,13 +57,8 @@ class Phlock {
 	
 	public function count($source_id, $graph, $destination_ids) {
 		$term = $this->createQueryTerm($source_id, $graph, $destination_ids);
-		$operation = new Flock_SelectOperation(array(
-			'operation_type'=>Flock_SelectOperationType::SimpleQuery,
-			'term'=>$term->toThrift()
-		));
-		$result = $this->client()->count2(array(array($operation)));
-		$unpack = unpack('V*', $result);  // one-based array
-		return $unpack[1];
+		$operation = new Phlock_SelectOperation($this->client(), $term);
+		return $operation->size();
 	}
 	
 	public function select($source_id, $graph, $destination_ids) {
