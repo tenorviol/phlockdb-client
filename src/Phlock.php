@@ -43,16 +43,11 @@ class Phlock {
 	}
 	
 	public function update($method, $source_id, $graph, $destination_ids, $priority = Flock_Priority::High) {
+		$operations = new Phlock_ExecuteOperations();
+		$operations->setPriority($priority);
 		$term = $this->createQueryTerm($source_id, $graph, $destination_ids);
-		$operation = new Flock_ExecuteOperation(array(
-			'operation_type' => $method,
-			'term' => $term
-		));
-		$operations = new Flock_ExecuteOperations(array(
-			'operations' => array($operation),
-			'priority' => $priority
-		));
-		return $this->client()->execute($operations);
+		$operations->addOperation(new Phlock_ExecuteOperation($method, $term));
+		return $this->client()->execute($operations->toThrift());
 	}
 	
 	public function contains($source_id, $graph, $destination_id) {
@@ -64,7 +59,7 @@ class Phlock {
 		$term = $this->createQueryTerm($source_id, $graph, $destination_ids);
 		$operation = new Flock_SelectOperation(array(
 			'operation_type'=>Flock_SelectOperationType::SimpleQuery,
-			'term'=>$term
+			'term'=>$term->toThrift()
 		));
 		$result = $this->client()->count2(array(array($operation)));
 		$unpack = unpack('V*', $result);  // one-based array
@@ -76,7 +71,7 @@ class Phlock {
 		$term->state_ids = array(Flock_EdgeState::Positive);
 		$operation = new Flock_SelectOperation(array(
 			'operation_type'=>Flock_SelectOperationType::SimpleQuery,
-			'term'=>$term
+			'term'=>$term->toThrift()
 		));
 		$page = new Flock_Page(array(
 			'count'=>10,
@@ -90,32 +85,9 @@ class Phlock {
 		return new PhlockdbResult($results[0]);
 	}
 	
-	public function createQueryTerm($source_id, $graph, $destination_ids) {
+	public function createQueryTerm($source, $graph, $destination) {
 		$graph_id = is_int($graph) ? $graph : $this->graphs[$graph];
-		if (!empty($destination_ids)) {
-			$destination_ids = $this->packDestinationIds(is_array($destination_ids) ? $destination_ids : array($destination_ids));
-		} else {
-			$destination_ids = null;
-		}
-		$client = $this->client();
-		$term = new Flock_QueryTerm(array(
-			'source_id'=>$source_id,
-			'graph_id'=>$graph_id,
-			'is_forward'=>true,
-			'destination_ids'=>$destination_ids
-		));
-		return $term;
-	}
-	
-	public function packDestinationIds(array $ids) {
-		$pack = '';
-		foreach ($ids as $id) {
-			for ($i = 0; $i < 8; $i++) {
-				$pack .= chr($id & 0xff);
-				$id = $id >> 8;
-			}
-		}
-		return $pack;
+		return new Phlock_QueryTerm($source, $graph_id, $destination);
 	}
 }
 
