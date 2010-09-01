@@ -4,6 +4,8 @@ class Phlock_Cursor {
 	
 	private $client;
 	private $term;
+	private $cursor = -1;  // IMPORTANT: starting cursor
+	private $result = null;
 	
 	public function __construct(FlockDBClient $client, Phlock_QueryTerm $term) {
 		$this->client = $client;
@@ -17,17 +19,37 @@ class Phlock_Cursor {
 	}
 	
 	public function currentPage() {
+		$result = $this->getResult();
+		return $this->unpackResultIds($result->ids);
+	}
+	
+	public function hasNextPage() {
+		return (bool)$this->getResult()->next_cursor;
+	}
+	
+	public function nextPage() {
+		$this->cursor = $this->getResult()->next_cursor;
+		$this->result = null;
+	}
+	
+	private function getResult() {
+		if ($this->result === null) {
+			$this->result = $this->query();
+		}
+		return $this->result;
+	}
+	
+	private function query() {
 		$page = new Flock_Page(array(
 			'count'=>10,
-			'cursor'=>-1  // IMPORTANT: first page must be -1
+			'cursor'=>$this->cursor
 		));
 		$query = new Flock_SelectQuery(array(
 			'operations'=>$this->toThrift(),
 			'page'=>$page
 		));
 		$results = $this->client->select2(array($query));
-		$result = $results[0];
-		return $this->unpackResultIds($result->ids);
+		return $results[0];
 	}
 	
 	public function toThrift() {

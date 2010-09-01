@@ -3,7 +3,7 @@
 $GLOBALS['THRIFT_ROOT'] = '/usr/local/thrift-0.2.0/lib/php/src';
 require_once 'src/autoload.php';
 
-class PhlockUtilsTest extends PHPUnit_Framework_TestCase {
+class PhlockTest extends PHPUnit_Framework_TestCase {
 	
 	private function getPhlock() {
 		return new Phlock(array('127.0.0.1:7915'), array('graphs'=>array('follows'=>1, 'blocks'=>2)));
