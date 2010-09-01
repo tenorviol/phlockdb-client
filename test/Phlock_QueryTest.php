@@ -4,7 +4,7 @@ $GLOBALS['THRIFT_ROOT'] = '/usr/local/thrift-0.2.0/lib/php/src';
 require_once 'src/autoload.php';
 require_once 'src/Phlock.php';
 
-class Phlock_QueryTermTest extends PHPUnit_Framework_TestCase {
+class Phlock_QueryTest extends PHPUnit_Framework_TestCase {
 	
 	/**
 	 * NOTE: The FlockDB client uses the ruby array method 'pack'
@@ -51,5 +51,16 @@ class Phlock_QueryTermTest extends PHPUnit_Framework_TestCase {
 		$term = new Phlock_QueryTerm(1,1,$ids);
 		$pack = $term->toThrift()->destination_ids;
 		$this->assertEquals($expected_pack, $pack, 'expected='.urlencode($expected_pack).' actual='.urlencode($pack));
+	}
+	
+	/**
+	 * @dataProvider packDestinationIdsProvider
+	 */
+	public function testUnpackResultIdsShouldMatchFlockDBClientMethod(array $expected_ids, $pack) {
+		$client = new FlockDBClient(null);
+		$term = new Phlock_QueryTerm(1,1,1);
+		$operation = new Phlock_SelectOperation($client, $term);
+		$unpack = $operation->unpackResultIds($pack);
+		$this->assertEquals($expected_ids, $unpack);
 	}
 }

@@ -10,13 +10,13 @@ class PhlockUtilsTest extends PHPUnit_Framework_TestCase {
 	}
 	
 	public function setUp() {
-		//usleep(500000);
+		usleep(500000);
 		$flock = $this->getPhlock();
 		$flock->add(1,1,2);
 		$flock->add(1,1,3);
 		$flock->add(2,1,1);
 		$flock->add(4,1,1);
-		//usleep(500000);
+		usleep(500000);
 	}
 	
 	private function assertEqualsRetry($expected, $function) {
@@ -55,10 +55,8 @@ class PhlockUtilsTest extends PHPUnit_Framework_TestCase {
 	
 	public function testSelect() {
 		$flock = $this->getPhlock();
-		$result = $flock->select(1,1,array(2,3));
-		$this->assertType('PhlockdbResult', $result);
-		
-		$this->markTestIncomplete();
-		$this->assertEquals(array(2,3), $result->toArray());
+		$result = $flock->select(1,1,array(2,3))->toArray();
+		sort($result);
+		$this->assertEquals(array(2,3), $result);
 	}
 }

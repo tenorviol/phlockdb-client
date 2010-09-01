@@ -63,21 +63,7 @@ class Phlock {
 	
 	public function select($source_id, $graph, $destination_ids) {
 		$term = $this->createQueryTerm($source_id, $graph, $destination_ids);
-		$term->state_ids = array(Flock_EdgeState::Positive);
-		$operation = new Flock_SelectOperation(array(
-			'operation_type'=>Flock_SelectOperationType::SimpleQuery,
-			'term'=>$term->toThrift()
-		));
-		$page = new Flock_Page(array(
-			'count'=>10,
-			'cursor'=>-1  // IMPORTANT: first page must be -1
-		));
-		$query = new Flock_SelectQuery(array(
-			'operations'=>array($operation),
-			'page'=>$page
-		));
-		$results = $this->client()->select2(array($query));
-		return new PhlockdbResult($results[0]);
+		return new Phlock_SelectOperation($this->client(), $term);
 	}
 	
 	public function createQueryTerm($source, $graph, $destination) {
