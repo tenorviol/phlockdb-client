@@ -35,17 +35,23 @@ class Phlock {
 	}
 	
 	public function add($source_id, $graph, $destination_ids) {
-		$this->update(Flock_ExecuteOperationType::Add, $source_id, $graph, $destination_ids);
+		$term = $this->createQueryTerm($source_id, $graph, $destination_ids);
+		$this->update(Flock_ExecuteOperationType::Add, $term);
 	}
 	
 	public function remove($source_id, $graph, $destination_ids) {
-		$this->update(Flock_ExecuteOperationType::Remove, $source_id, $graph, $destination_ids);
+		$term = $this->createQueryTerm($source_id, $graph, $destination_ids);
+		$this->update(Flock_ExecuteOperationType::Remove, $term);
 	}
 	
-	public function update($method, $source_id, $graph, $destination_ids, $priority = Flock_Priority::High) {
+	public function archive($source_id, $graph, $destination_ids) {
+		$term = $this->createQueryTerm($source_id, $graph, $destination_ids);
+		$this->update(Flock_ExecuteOperationType::Archive, $term);
+	}
+	
+	public function update($method, Phlock_QueryTerm $term, $priority = Flock_Priority::High) {
 		$operations = new Phlock_ExecuteOperations($this->client());
 		$operations->setPriority($priority);
-		$term = $this->createQueryTerm($source_id, $graph, $destination_ids);
 		$operations->addOperation(new Phlock_ExecuteOperation($method, $term));
 		$operations->apply();
 	}
