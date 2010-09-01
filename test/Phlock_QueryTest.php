@@ -59,8 +59,8 @@ class Phlock_QueryTest extends PHPUnit_Framework_TestCase {
 	public function testUnpackResultIdsShouldMatchFlockDBClientMethod(array $expected_ids, $pack) {
 		$client = new FlockDBClient(null);
 		$term = new Phlock_QueryTerm(1,1,1);
-		$operation = new Phlock_SelectOperation($client, $term);
-		$unpack = $operation->unpackResultIds($pack);
+		$cursor = new Phlock_Cursor($client, $term);
+		$unpack = $cursor->unpackResultIds($pack);
 		$this->assertEquals($expected_ids, $unpack);
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 
-class Phlock_SelectOperation {
+class Phlock_Cursor {
 	
 	private $client;
 	private $term;
@@ -16,7 +16,7 @@ class Phlock_SelectOperation {
 		return $unpack[1];
 	}
 	
-	public function toArray() {
+	public function currentPage() {
 		$page = new Flock_Page(array(
 			'count'=>10,
 			'cursor'=>-1  // IMPORTANT: first page must be -1

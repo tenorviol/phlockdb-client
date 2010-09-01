@@ -62,14 +62,13 @@ class Phlock {
 	}
 	
 	public function size($source_id, $graph, $destination_ids) {
-		$term = $this->createQueryTerm($source_id, $graph, $destination_ids);
-		$operation = new Phlock_SelectOperation($this->client(), $term);
-		return $operation->size();
+		$cursor = $this->select($source_id, $graph, $destination_ids);
+		return $cursor->size();
 	}
 	
 	public function select($source_id, $graph, $destination_ids) {
 		$term = $this->createQueryTerm($source_id, $graph, $destination_ids);
-		return new Phlock_SelectOperation($this->client(), $term);
+		return new Phlock_Cursor($this->client(), $term);
 	}
 	
 	public function createQueryTerm($source, $graph, $destination) {

@@ -110,14 +110,14 @@ class PhlockUtilsTest extends PHPUnit_Framework_TestCase {
 	
 	public function testSelectAll() {
 		$flock = $this->getPhlock();
-		$result = $flock->select(1,1,null)->toArray();
+		$result = $flock->select(1,1,null)->currentPage();
 		sort($result);
 		$this->assertEquals(array(2,3), $result);
 	}
 	
 	public function testSelectMultiple() {
 		$flock = $this->getPhlock();
-		$result = $flock->select(1,1,array(2,3))->toArray();
+		$result = $flock->select(1,1,array(2,3))->currentPage();
 		sort($result);
 		$this->assertEquals(array(2,3), $result);
 	}
