@@ -59,5 +59,5 @@ This project is in its infancy. Here is a list of things outstanding today.
 3. Cursor pagination features: prev page, and native Iterator support.
 4. This:
 
-	flockdb.select(nil, :follows, 1).difference(flockdb.select(1, :follows, nil).intersect(2, :follows, nil)).to_a
+	`flockdb.select(nil, :follows, 1).difference(flockdb.select(1, :follows, nil).intersect(2, :follows, nil)).to_a`
 
