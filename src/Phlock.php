@@ -71,7 +71,3 @@ class Phlock {
 		return new Phlock_QueryTerm($source, $graph_id, $destination);
 	}
 }
-
-class PhlockdbResult {
-	
-}
