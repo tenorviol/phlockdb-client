@@ -47,7 +47,7 @@ class Phlock {
 		$operations->setPriority($priority);
 		$term = $this->createQueryTerm($source_id, $graph, $destination_ids);
 		$operations->addOperation(new Phlock_ExecuteOperation($method, $term));
-		return $operations->apply();
+		$operations->apply();
 	}
 	
 	public function contains($source_id, $graph, $destination_id) {

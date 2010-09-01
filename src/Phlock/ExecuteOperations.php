@@ -19,7 +19,7 @@ class Phlock_ExecuteOperations {
 	}
 	
 	public function apply() {
-		return $this->client->execute($this->toThrift());
+		$this->client->execute($this->toThrift());
 	}
 	
 	public function toThrift() {
