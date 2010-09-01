@@ -1,6 +1,6 @@
 <?php
 
-$GLOBALS['THRIFT_ROOT'] = '/usr/local/thrift-0.2.0/lib/php/src';
+$GLOBALS['THRIFT_ROOT'] = 'thrift';
 require_once 'src/autoload.php';
 
 class Phlock_CursorTest extends PHPUnit_Framework_TestCase {
