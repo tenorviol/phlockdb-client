@@ -12,7 +12,7 @@ If you already have the thrift library in place, use it.
 You will need to copy `thrift/packages/FlockDB` to your own thrift `packages` directory.
 
 For those lacking, I've made the library available in the `thrift` directory.
-If you prefer going to the source, download it from [Apache Thrift](http://incubator.apache.org/thrift/)
+Or if you prefer going to the source, download it from [Apache Thrift](http://incubator.apache.org/thrift/)
 and copy `thrift/packages/FlockDB` into the fresh download.
 
 Usage
