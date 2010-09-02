@@ -7,14 +7,13 @@ for connecting to [FlockDB](http://github.com/twitter/flockdb) instances
 Setup
 -----
 
-Obtain a copy of the thrift php libraries, any version will do.
+Obtain a copy of the thrift php library, any version will do.
+If you already have the thrift library in place, use it.
+You will need to copy `thrift/packages/FlockDB` to your own thrift `packages` directory.
 
-If you already have the thrift libraries in place, use those.
-You will need to copy `thrift/packages/FlockDB` to your own thrift packages directory.
-
-If you need the thrift php libraries, I've copied them to the `thrift` directory.
-Or if you prefer going straight to the source, download them from [Apache Thrift](http://incubator.apache.org/thrift/),
-and copy the `thrift/packages/FlockDB` into the fresh download.
+For those lacking, I've made the library available in the `thrift` directory.
+If you prefer going to the source, download it from [Apache Thrift](http://incubator.apache.org/thrift/)
+and copy `thrift/packages/FlockDB` into the fresh download.
 
 Usage
 -----
