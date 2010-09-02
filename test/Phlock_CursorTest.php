@@ -40,4 +40,17 @@ class Phlock_CursorTest extends PHPUnit_Framework_TestCase {
 		}
 		$this->assertEquals(count($this->expected), $total_ids);
 	}
+	
+	public function testIterator() {
+		$flock = $this->getPhlock();
+		$cursor = $flock->select(10,1,null);
+		
+		$ids = array();
+		foreach ($cursor as $key => $id) {
+			$ids[] = $id;
+		}
+		rsort($ids);
+		//print_r($ids);
+		$this->assertEquals($this->expected, $ids);
+	}
 }

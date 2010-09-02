@@ -14,7 +14,7 @@ You will need to copy `thrift/packages/FlockDB` to your own thrift packages dire
 
 If you need the thrift php libraries, I've copied them to the `thrift` directory.
 Or if you prefer going straight to the source, download them from [Apache Thrift](http://incubator.apache.org/thrift/),
-and copy the FlockDB package into the fresh download.
+and copy the `thrift/packages/FlockDB` into the fresh download.
 
 Usage
 -----
@@ -36,7 +36,7 @@ Edge manipulation:
 	$flock->add(1, 'follows', 2);
 	$flock->remove(1, 'blocks', 2);
 
-Queries are paginated:
+Queries can be paginated:
 
 	$cursor = $flock->select(1, 'follows', null);
 	
@@ -48,6 +48,11 @@ Queries are paginated:
 		$page2 = $cursor->currentPage();
 		print_r($page2);
 	}
+
+Or iterated:
+
+	$cursor = $flock->select(1, 'follows', null);
+	$following = iterator_to_array($cursor, false);
 
 TODO
 ----

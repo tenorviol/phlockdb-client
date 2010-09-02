@@ -1,11 +1,15 @@
 <?php
 
-class Phlock_Cursor {
+class Phlock_Cursor implements Iterator {
 	
 	private $client;
 	private $term;
 	private $cursor = -1;  // IMPORTANT: starting cursor
 	private $result = null;
+	
+	private $page;
+	private $page_size;
+	private $page_marker;
 	
 	public function __construct(FlockDBClient $client, Phlock_QueryTerm $term) {
 		$this->client = $client;
@@ -18,9 +22,35 @@ class Phlock_Cursor {
 		return $unpack[1];
 	}
 	
+	public function current() {
+		if ($this->page_marker >= $this->page_size) {
+			$this->nextPage();
+			$this->getResult();
+		}
+		return $this->page[$this->page_marker];
+	}
+	
+	public function key() {
+		return "$this->cursor:$this->page_marker";
+	}
+	
+	public function next() {
+		$this->page_marker++;
+	}
+	
+	public function rewind() {
+		$cursor = -1;
+		$result = null;
+	}
+	
+	public function valid() {
+		$this->getResult();
+		return $this->page_marker < $this->page_size || $this->hasNextPage();
+	}
+	
 	public function currentPage() {
 		$result = $this->getResult();
-		return $this->unpackResultIds($result->ids);
+		return $this->page;
 	}
 	
 	public function hasNextPage() {
@@ -35,6 +65,9 @@ class Phlock_Cursor {
 	private function getResult() {
 		if ($this->result === null) {
 			$this->result = $this->query();
+			$this->page = $this->unpackResultIds($this->result->ids);
+			$this->page_size = count($this->page);
+			$this->page_marker = 0;
 		}
 		return $this->result;
 	}
